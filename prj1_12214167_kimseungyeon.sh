@@ -62,7 +62,41 @@ do
 			done
 		fi	;;
 	5)      
-                echo "5" ;;
+		read -p "Do you want to modify the format of date? (y/n) :" yn
+                if [ $yn = "n" ]
+                then
+			continue
+		fi
+
+		data=$(cat $matches | awk -F,  '{print $1}' | sed -E 's/([a-zA-Z]+) ([0-9]+) ([0-9]+) - ([0-9]+:[0-9]+)(am|pm)/\3\/\1\/\2 \4\5/')
+		IFS=$'\n'
+		result=
+
+		for var in $data
+		do
+			mon=$(echo $var | awk -F '/' '{print $2}')
+			case $mon in
+			Jan) month=1;;
+			Feb) month=2;;
+			Mar) month=3;;
+			Apr) month=4;;
+			May) month=5;;
+			Jun) month=6;;
+			Jul) month=7;;
+			Aug) month=8;;
+			Sep) month=9;;
+			Oct) month=10;;
+			Nov) month=11;;
+			Dec) month=12;;
+			esac
+			modified=$(echo $var | sed -E "s/[A-Z](.*)\//$month\//")
+			if [[ $modified =~ ^[0-9] ]]
+			then
+				result="$result\n$modified"
+			fi	
+		done
+
+		echo -e $result | head -n 11	;;
 	6)      
                 echo "6" ;;
 	7)      
