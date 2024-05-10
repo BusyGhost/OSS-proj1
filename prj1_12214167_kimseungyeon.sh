@@ -92,13 +92,18 @@ do
 			modified=$(echo $var | sed -E "s/[A-Z](.*)\//$month\//")
 			if [[ $modified =~ ^[0-9] ]]
 			then
-				result="$result\n$modified"
+				result="$result$modified\n"
 			fi	
 		done
 
-		echo -e $result | head -n 11	;;
+		echo -e $result | head -n 10	;;
 	6)      
-                echo "6" ;;
+		cat $teams | awk -F ',' '{print $1}' | tail -n +2 | awk '{print NR")",$0}' 
+		read -p "Enter your team number:" num
+		name=$(cat $teams | awk -F ',' '{print $1}' | tail -n +2 | sed -n "$num p")
+
+		cat $matches | awk -v k="$name" -F ',' '$3==k {print (($5-$6))"," $1"," $3, $5, "vs", $6, $4}' | sort -rn -k 1 | awk  -F ',' 'NR == 1 {val=$1} $1 == val {print "\n" $2 "\n" $3}' 
+		;;
 	7)      
                 echo "Bye!"
 		stop="Y" ;;
@@ -108,4 +113,5 @@ do
 done
 
 exit 0
+
 
