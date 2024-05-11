@@ -1,8 +1,8 @@
 #! /bin/bash
 
-if [ $# -ne 3 ]
+if [ $# -ne 3 ] || [ "$1" != "teams.csv" ] || [ "$2" != "players.csv" ] || [ "$3" != "matches.csv" ]
 then
-	echo "usage: ./prj1_12214167_kimseungyeon file1 file2 file3"
+	echo "usage: ./prj1_12214167_kimseungyeon teams.csv players.csv matches.csv"
 	exit 1
 fi
 
@@ -21,14 +21,12 @@ matches=$3
 until [ "$stop" = "Y" ]
 do
 	echo -e "\n[MENU]"
-	echo "1. Get the data of Heung-Min Son's Current Club, Appearances, Goals, Assits in
-	players.csv"
+	echo "1. Get the data of Heung-Min Son's Current Club, Appearances, Goals, Assits in players.csv"
 	echo "2. Get the team data to enter a league position in team.csv"
 	echo "3. Get the Top-3 Attendance matches in matches.csv"
 	echo "4. Get the team's league position and team's top scorer in teams.csv &player.csv"
 	echo "5. Get the modified format of date_GMT in matches.csv"
-	echo "6. Get the data of the winningteam by the largest difference on home stadium in teams.c
-	sv & matches.csv"
+	echo "6. Get the data of the winningteam by the largest difference on home stadium in teams.csv & matches.csv"
 	echo "7. Exit"
 	read -p "Enter your CHOICE(1~7) :" choice
 
@@ -102,10 +100,10 @@ do
 		read -p "Enter your team number:" num
 		name=$(cat $teams | awk -F ',' '{print $1}' | tail -n +2 | sed -n "$num p")
 
-		cat $matches | awk -v k="$name" -F ',' '$3==k {print (($5-$6))"," $1"," $3, $5, "vs", $6, $4}' | sort -rn -k 1 | awk  -F ',' 'NR == 1 {val=$1} $1 == val {print "\n" $2 "\n" $3}' 
+		cat $matches | awk -v k="$name" -F ',' '$3==k {print (($5-$6))"," $1"," $3, $5, "vs", $6, $4}' | sort -rn -k 1 | awk  -F ',' 'NR == 1 {val=$1} $1 == val && val>0 {print "\n" $2 "\n" $3}' 
 		;;
 	7)      
-                echo "Bye!"
+                echo -e "Bye!\n"
 		stop="Y" ;;
 	*)	
 		echo "Error: Invalid option.."
@@ -113,5 +111,3 @@ do
 done
 
 exit 0
-
-
