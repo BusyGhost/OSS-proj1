@@ -2,7 +2,7 @@
 
 if [ $# -ne 3 ] || [ "$1" != "teams.csv" ] || [ "$2" != "players.csv" ] || [ "$3" != "matches.csv" ]
 then
-	echo "usage: ./prj1_12214167_kimseungyeon teams.csv players.csv matches.csv"
+	echo "usage: ./proj1_12214167_kimseungyeon teams.csv players.csv matches.csv"
 	exit 1
 fi
 
